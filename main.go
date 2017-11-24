@@ -11,9 +11,9 @@ func main() {
 	dna := ga.InitDNA(len(target))
 	partner := ga.InitDNA(len(target))
 	fmt.Printf("%s, %s\n", dna.Genes, partner.Genes)
-	fmt.Println(dna.Fitness(target))
+	fmt.Println(dna.CalcFitness(target))
 	child :=dna.Crossover(partner)
-	fmt.Printf("%s\n", child)
+	fmt.Printf("%s\n", child.Genes)
 	child.Mutate(0.2)
-	fmt.Printf("%s\n", child)
+	fmt.Printf("%s\n", child.Genes)
 }

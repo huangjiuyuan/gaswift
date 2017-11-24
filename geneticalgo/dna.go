@@ -7,33 +7,35 @@ import (
 
 type DNA struct {
 	Genes []byte
+	Fitness float32
 }
 
-func InitDNA(num int) *DNA {
-	dna := new(DNA)
-	dna.Genes = make([]byte, num)
-	for i := 0; i < len(dna.Genes); i++ {
-		dna.Genes[i] = byte(rand.Intn(96) + 32)
+func InitDNA(num int) DNA {
+	d := new(DNA)
+	d.Genes = make([]byte, num)
+	for i := 0; i < len(d.Genes); i++ {
+		d.Genes[i] = byte(rand.Intn(96) + 32)
 	}
-	return dna
+	return *d
 }
 
-func (dna *DNA) Fitness(target string) float32 {
+func (d *DNA) CalcFitness(target string) float32 {
 	score := 0
-	for i := 0; i < len(dna.Genes); i++ {
-		if dna.Genes[i] == target[i] {
+	for i := 0; i < len(d.Genes); i++ {
+		if d.Genes[i] == target[i] {
 			score++
 		}
 	}
-	return float32(score) / float32(len(target))
+	d.Fitness = float32(score) / float32(len(target))
+	return d.Fitness
 }
 
-func (dna *DNA) Crossover(partner *DNA) *DNA {	
-	child := InitDNA(len(dna.Genes))
-	mid := rand.Intn(len(dna.Genes))
-	for i := 0; i < len(dna.Genes); i++ {
+func (d *DNA) Crossover(partner DNA) DNA {	
+	child := InitDNA(len(d.Genes))
+	mid := rand.Intn(len(d.Genes))
+	for i := 0; i < len(d.Genes); i++ {
 		if i > mid {
-			child.Genes[i] = dna.Genes[i]
+			child.Genes[i] = d.Genes[i]
 		} else {
 			child.Genes[i] = partner.Genes[i]
 		}
@@ -41,13 +43,13 @@ func (dna *DNA) Crossover(partner *DNA) *DNA {
 	return child
 }
 
-func (dna *DNA) Mutate(rate float32) {
+func (d *DNA) Mutate(rate float32) {
 	if rate < 0 || rate > 1 {
 		log.Fatalf("Mutation rate %f must be between 0 and 1", rate)
 	}
-	for i := 0; i < len(dna.Genes); i++ {
+	for i := 0; i < len(d.Genes); i++ {
 		if rand.Float32() < rate {
-			dna.Genes[i] = byte(rand.Intn(96) + 32)
+			d.Genes[i] = byte(rand.Intn(96) + 32)
 		}
 	}
 }
