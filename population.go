@@ -1,4 +1,4 @@
-package geneticalgo
+package gaswift
 
 import (
 	"math/rand"
@@ -21,14 +21,14 @@ func InitPopulation(target string, rate float32, num int) *Population {
 	for i := 0; i < len(p.Population); i++ {
 		p.Population[i] = InitDNA(len(target))
 	}
-	p.CalcFitness(target)
+	p.CalcPopulationFitness(target)
 	p.MatingPool = make([]DNA, 0)
 	p.Finished = false
 	p.PerfectScore = 1
 	return p
 }
 
-func (p *Population) CalcFitness(target string) {
+func (p *Population) CalcPopulationFitness(target string) {
 	for i := 0; i < len(p.Population); i++ {
 		p.Population[i].CalcFitness(target)
 	}
@@ -45,7 +45,7 @@ func (p *Population) NaturalSelection() {
 	}
 
 	for i := 0; i < len(p.Population); i++ {
-		n := int(p.Population[i].Fitness * 100) + 20
+		n := int(p.Population[i].Fitness * 100)
 		for j := 0; j < n; j++ {
 			p.MatingPool = append(p.MatingPool, p.Population[i])
 		}

@@ -1,4 +1,4 @@
-package geneticalgo
+package gaswift
 
 import (
 	"log"
